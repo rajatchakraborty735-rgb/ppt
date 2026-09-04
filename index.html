@@ -1,0 +1,3014 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+               maximum-scale=5.0,
+               user-scalable=yes">
+
+<title>My Presentation</title>
+
+
+<style>
+
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+html,
+body {
+
+    width: 100%;
+    height: 100%;
+
+}
+
+
+body {
+
+    background: #080a0f;
+
+    color: white;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    overflow: hidden;
+
+}
+
+
+/* =====================================================
+   APP
+===================================================== */
+
+#app {
+
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #171b25 0%,
+            #080a0f 72%
+        );
+
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header {
+
+    height: 62px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 20px;
+
+    background:
+        rgba(15,18,25,.97);
+
+    border-bottom:
+        1px solid #292e38;
+
+}
+
+
+.brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+}
+
+
+.logo {
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #756bff,
+            #5148d7
+        );
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 19px;
+
+    font-weight: bold;
+
+    box-shadow:
+        0 5px 20px
+        rgba(99,91,255,.25);
+
+}
+
+
+.brandText h1 {
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+}
+
+
+.brandText p {
+
+    margin-top: 3px;
+
+    font-size: 11px;
+
+    color: #818997;
+
+}
+
+
+.headerButtons {
+
+    display: flex;
+
+    gap: 7px;
+
+}
+
+
+.headerButton {
+
+    width: 40px;
+    height: 38px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #1c2029;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 19px;
+
+    transition: .2s;
+
+}
+
+
+.headerButton:hover {
+
+    background: #635bff;
+
+}
+
+
+.headerButton:active {
+
+    transform: scale(.94);
+
+}
+
+
+/* =====================================================
+   VIEWER
+===================================================== */
+
+.viewer {
+
+    flex: 1;
+
+    min-height: 0;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 12px 65px;
+
+    overflow: hidden;
+
+}
+
+
+/* =====================================================
+   SLIDE AREA
+===================================================== */
+
+.slideArea {
+
+    width: 100%;
+
+    height: 100%;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: auto;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        #3a404c
+        transparent;
+
+    touch-action: none;
+
+}
+
+
+/* =====================================================
+   CANVAS WRAPPER
+===================================================== */
+
+.canvasWrapper {
+
+    position: relative;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition:
+        transform .08s linear;
+
+}
+
+
+/* =====================================================
+   PDF CANVAS
+===================================================== */
+
+#pdfCanvas {
+
+    display: block;
+
+    background: white;
+
+    border-radius: 3px;
+
+    box-shadow:
+        0 20px 70px
+        rgba(0,0,0,.65);
+
+    user-select: none;
+
+    -webkit-user-select: none;
+
+    pointer-events: none;
+
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.loading {
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%,-50%);
+
+    text-align: center;
+
+    color: #929aa8;
+
+    font-size: 14px;
+
+    z-index: 5;
+
+}
+
+
+.loader {
+
+    width: 32px;
+    height: 32px;
+
+    margin:
+        0 auto 12px;
+
+    border-radius: 50%;
+
+    border:
+        3px solid #303642;
+
+    border-top-color:
+        #7168ff;
+
+    animation:
+        spin .8s linear infinite;
+
+}
+
+
+@keyframes spin {
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+.error {
+
+    display: none;
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%,-50%);
+
+    width: 90%;
+
+    max-width: 440px;
+
+    padding: 26px;
+
+    text-align: center;
+
+    background: #171b23;
+
+    border:
+        1px solid #303640;
+
+    border-radius: 12px;
+
+    z-index: 10;
+
+}
+
+
+.error h2 {
+
+    margin-bottom: 10px;
+
+    font-size: 18px;
+
+}
+
+
+.error p {
+
+    color: #9299a6;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+}
+
+
+/* =====================================================
+   NAVIGATION BUTTONS
+===================================================== */
+
+.nav {
+
+    position: absolute;
+
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    width: 48px;
+
+    height: 68px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background:
+        rgba(27,31,40,.94);
+
+    color: white;
+
+    font-size: 40px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    z-index: 20;
+
+    transition: .2s;
+
+}
+
+
+.nav:hover {
+
+    background: #635bff;
+
+    transform:
+        translateY(-50%)
+        scale(1.04);
+
+}
+
+
+.nav:disabled {
+
+    opacity: .25;
+
+    cursor: default;
+
+}
+
+
+.navLeft {
+
+    left: 10px;
+
+}
+
+
+.navRight {
+
+    right: 10px;
+
+}
+
+
+/* =====================================================
+   PROGRESS
+===================================================== */
+
+.progress {
+
+    height: 3px;
+
+    flex-shrink: 0;
+
+    background: #252a33;
+
+}
+
+
+.progressBar {
+
+    width: 0%;
+
+    height: 100%;
+
+    background: #635bff;
+
+    transition:
+        width .2s ease;
+
+}
+
+
+/* =====================================================
+   CONTROLS
+===================================================== */
+
+.controls {
+
+    height: 53px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    background: #11141b;
+
+    border-top:
+        1px solid #292e37;
+
+}
+
+
+.controlButton {
+
+    width: 37px;
+
+    height: 32px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: #1d222b;
+
+    color: #d0d4dc;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    transition: .2s;
+
+}
+
+
+.controlButton:hover {
+
+    background: #635bff;
+
+    color: white;
+
+}
+
+
+.controlButton:active {
+
+    transform: scale(.92);
+
+}
+
+
+.counter {
+
+    min-width: 70px;
+
+    text-align: center;
+
+    color: #9da5b3;
+
+    font-size: 13px;
+
+}
+
+
+.counter b {
+
+    color: white;
+
+}
+
+
+.zoomDisplay {
+
+    min-width: 50px;
+
+    text-align: center;
+
+    color: #a5adba;
+
+    font-size: 12px;
+
+}
+
+
+/* =====================================================
+   SEPARATOR
+===================================================== */
+
+.separator {
+
+    width: 1px;
+
+    height: 22px;
+
+    background: #303540;
+
+    margin: 0 5px;
+
+}
+
+
+/* =====================================================
+   THUMBNAILS
+===================================================== */
+
+.thumbnailPanel {
+
+    height: 83px;
+
+    flex-shrink: 0;
+
+    background: #0d1016;
+
+    border-top:
+        1px solid #242932;
+
+    padding: 8px 14px;
+
+    overflow-x: auto;
+
+    scrollbar-width: thin;
+
+}
+
+
+.thumbnailPanel::-webkit-scrollbar {
+
+    height: 5px;
+
+}
+
+
+.thumbnailPanel::-webkit-scrollbar-thumb {
+
+    background: #363c48;
+
+    border-radius: 10px;
+
+}
+
+
+.thumbnails {
+
+    height: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 9px;
+
+}
+
+
+.thumbnail {
+
+    width: 105px;
+
+    height: 65px;
+
+    flex-shrink: 0;
+
+    object-fit: contain;
+
+    background: white;
+
+    border:
+        2px solid transparent;
+
+    border-radius: 4px;
+
+    cursor: pointer;
+
+    opacity: .45;
+
+    transition: .2s;
+
+}
+
+
+.thumbnail:hover {
+
+    opacity: .85;
+
+}
+
+
+.thumbnail.active {
+
+    opacity: 1;
+
+    border-color:
+        #635bff;
+
+    box-shadow:
+        0 0 12px
+        rgba(99,91,255,.4);
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:700px) {
+
+
+    .header {
+
+        height: 55px;
+
+        padding: 0 10px;
+
+    }
+
+
+    .logo {
+
+        width: 34px;
+        height: 34px;
+
+    }
+
+
+    .brandText h1 {
+
+        font-size: 13px;
+
+    }
+
+
+    .brandText p {
+
+        display: none;
+
+    }
+
+
+    .headerButton {
+
+        width: 37px;
+        height: 36px;
+
+    }
+
+
+    .viewer {
+
+        padding:
+            5px 40px;
+
+    }
+
+
+    .nav {
+
+        width: 33px;
+
+        height: 54px;
+
+        font-size: 30px;
+
+    }
+
+
+    .navLeft {
+
+        left: 3px;
+
+    }
+
+
+    .navRight {
+
+        right: 3px;
+
+    }
+
+
+    .thumbnailPanel {
+
+        display: none;
+
+    }
+
+
+    .controls {
+
+        height: 53px;
+
+        gap: 4px;
+
+        overflow-x: auto;
+
+        justify-content: center;
+
+    }
+
+
+    .controlButton {
+
+        width: 33px;
+
+        flex-shrink: 0;
+
+    }
+
+
+    .zoomDisplay {
+
+        min-width: 43px;
+
+    }
+
+
+    .separator {
+
+        margin: 0 2px;
+
+    }
+
+}
+
+
+/* =====================================================
+   FULLSCREEN
+===================================================== */
+
+:fullscreen .header {
+
+    display: none;
+
+}
+
+
+:fullscreen .controls {
+
+    display: none;
+
+}
+
+
+:fullscreen .progress {
+
+    display: none;
+
+}
+
+
+:fullscreen .thumbnailPanel {
+
+    display: none;
+
+}
+
+
+:fullscreen .viewer {
+
+    height: 100vh;
+
+    padding:
+        20px 70px;
+
+}
+
+
+/* =====================================================
+   ZOOMED STATE
+===================================================== */
+
+.slideArea.zoomed {
+
+    align-items: flex-start;
+
+    justify-content: flex-start;
+
+    padding: 30px;
+
+}
+
+
+/* =====================================================
+   FULLSCREEN MOBILE
+===================================================== */
+
+@media(max-width:700px) {
+
+    :fullscreen .viewer {
+
+        padding:
+            5px 38px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div id="app">
+
+
+<!-- =================================================
+     HEADER
+================================================== -->
+
+<header class="header">
+
+
+    <div class="brand">
+
+
+        <div class="logo">
+
+            P
+
+        </div>
+
+
+        <div class="brandText">
+
+            <h1 id="presentationTitle">
+
+                My Presentation
+
+            </h1>
+
+
+            <p>
+
+                Online Presentation Viewer
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+
+    <div class="headerButtons">
+
+
+        <!-- DOWNLOAD -->
+
+        <button
+            class="headerButton"
+            onclick="downloadPresentation()"
+            title="Download">
+
+            ↓
+
+        </button>
+
+
+        <!-- FULLSCREEN -->
+
+        <button
+            class="headerButton"
+            onclick="toggleFullscreen()"
+            title="Fullscreen">
+
+            ⛶
+
+        </button>
+
+
+    </div>
+
+
+</header>
+
+
+
+<!-- =================================================
+     VIEWER
+================================================== -->
+
+<main class="viewer">
+
+
+    <!-- PREVIOUS -->
+
+    <button
+        class="nav navLeft"
+        id="previousButton"
+        onclick="previousSlide()">
+
+        ‹
+
+    </button>
+
+
+
+    <!-- SLIDE -->
+
+    <div
+        class="slideArea"
+        id="slideArea">
+
+
+        <div
+            class="canvasWrapper"
+            id="canvasWrapper">
+
+
+            <canvas
+                id="pdfCanvas">
+            </canvas>
+
+
+        </div>
+
+
+
+        <!-- LOADING -->
+
+        <div
+            class="loading"
+            id="loading">
+
+
+            <div class="loader"></div>
+
+
+            Loading presentation...
+
+
+        </div>
+
+
+
+        <!-- ERROR -->
+
+        <div
+            class="error"
+            id="error">
+
+
+            <h2>
+
+                Presentation unavailable
+
+            </h2>
+
+
+            <p>
+
+                Make sure
+                <b>presentation.pdf</b>
+                is inside the same folder
+                as <b>index.html</b>.
+
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- NEXT -->
+
+    <button
+        class="nav navRight"
+        id="nextButton"
+        onclick="nextSlide()">
+
+        ›
+
+    </button>
+
+
+</main>
+
+
+
+<!-- =================================================
+     PROGRESS
+================================================== -->
+
+<div class="progress">
+
+    <div
+        class="progressBar"
+        id="progressBar">
+    </div>
+
+</div>
+
+
+
+<!-- =================================================
+     CONTROLS
+================================================== -->
+
+<div class="controls">
+
+
+    <button
+        class="controlButton"
+        onclick="firstSlide()"
+        title="First">
+
+        ⏮
+
+    </button>
+
+
+    <button
+        class="controlButton"
+        onclick="previousSlide()"
+        title="Previous">
+
+        ←
+
+    </button>
+
+
+    <div class="counter">
+
+        <b id="currentSlide">
+            1
+        </b>
+
+        /
+
+        <span id="totalSlides">
+            0
+        </span>
+
+    </div>
+
+
+    <button
+        class="controlButton"
+        onclick="nextSlide()"
+        title="Next">
+
+        →
+
+    </button>
+
+
+    <button
+        class="controlButton"
+        onclick="lastSlide()"
+        title="Last">
+
+        ⏭
+
+    </button>
+
+
+
+    <div class="separator"></div>
+
+
+
+    <!-- ZOOM OUT -->
+
+    <button
+        class="controlButton"
+        onclick="zoomOut()"
+        title="Zoom Out">
+
+        −
+
+    </button>
+
+
+    <!-- ZOOM LEVEL -->
+
+    <div
+        class="zoomDisplay"
+        id="zoomDisplay">
+
+        100%
+
+    </div>
+
+
+    <!-- ZOOM IN -->
+
+    <button
+        class="controlButton"
+        onclick="zoomIn()"
+        title="Zoom In">
+
+        +
+
+    </button>
+
+
+    <!-- RESET -->
+
+    <button
+        class="controlButton"
+        onclick="resetZoom()"
+        title="Reset Zoom">
+
+        ⟳
+
+    </button>
+
+
+</div>
+
+
+
+<!-- =================================================
+     THUMBNAILS
+================================================== -->
+
+<div class="thumbnailPanel">
+
+    <div
+        class="thumbnails"
+        id="thumbnails">
+    </div>
+
+</div>
+
+
+</div>
+
+
+
+<!-- =================================================
+     PDF.JS
+================================================== -->
+
+<script type="module">
+
+
+import {
+
+    getDocument,
+
+    GlobalWorkerOptions
+
+}
+
+from
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs";
+
+
+
+GlobalWorkerOptions.workerSrc =
+
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs";
+
+
+
+/* =====================================================
+   SETTINGS
+===================================================== */
+
+const PDF_FILE =
+    "presentation.pdf";
+
+
+const PRESENTATION_TITLE =
+    "My Presentation";
+
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const canvas =
+    document.getElementById(
+        "pdfCanvas"
+    );
+
+
+const ctx =
+    canvas.getContext(
+        "2d"
+    );
+
+
+const slideArea =
+    document.getElementById(
+        "slideArea"
+    );
+
+
+const canvasWrapper =
+    document.getElementById(
+        "canvasWrapper"
+    );
+
+
+const loading =
+    document.getElementById(
+        "loading"
+    );
+
+
+const errorBox =
+    document.getElementById(
+        "error"
+    );
+
+
+const currentSlideElement =
+    document.getElementById(
+        "currentSlide"
+    );
+
+
+const totalSlidesElement =
+    document.getElementById(
+        "totalSlides"
+    );
+
+
+const progressBar =
+    document.getElementById(
+        "progressBar"
+    );
+
+
+const thumbnails =
+    document.getElementById(
+        "thumbnails"
+    );
+
+
+const previousButton =
+    document.getElementById(
+        "previousButton"
+    );
+
+
+const nextButton =
+    document.getElementById(
+        "nextButton"
+    );
+
+
+const zoomDisplay =
+    document.getElementById(
+        "zoomDisplay"
+    );
+
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let pdf = null;
+
+
+let pageNumber = 1;
+
+
+let rendering = false;
+
+
+let pendingPage = null;
+
+
+/*
+    Zoom level.
+*/
+
+let zoomLevel = 1;
+
+
+/*
+    Pan position.
+*/
+
+let panX = 0;
+
+let panY = 0;
+
+
+/*
+    Touch state.
+*/
+
+let touchStartX = 0;
+
+let touchStartY = 0;
+
+
+let lastDistance = 0;
+
+
+let lastCenterX = 0;
+
+let lastCenterY = 0;
+
+
+let twoFingerGesture = false;
+
+
+/*
+    Prevent excessive PDF rendering
+    during pinch.
+*/
+
+let pinchRenderTimer = null;
+
+
+
+/* =====================================================
+   LOAD PDF
+===================================================== */
+
+async function loadPresentation() {
+
+    try {
+
+
+        const loadingTask =
+            getDocument(
+                PDF_FILE
+            );
+
+
+        pdf =
+            await loadingTask.promise;
+
+
+        totalSlidesElement.textContent =
+            pdf.numPages;
+
+
+        document.title =
+            PRESENTATION_TITLE;
+
+
+        document.querySelector(
+            "#presentationTitle"
+        ).textContent =
+            PRESENTATION_TITLE;
+
+
+        loading.style.display =
+            "none";
+
+
+        await createThumbnails();
+
+
+        await renderPage(
+            1
+        );
+
+
+    }
+
+    catch(error) {
+
+
+        console.error(
+            "PDF loading error:",
+            error
+        );
+
+
+        loading.style.display =
+            "none";
+
+
+        errorBox.style.display =
+            "block";
+
+    }
+
+}
+
+
+
+/* =====================================================
+   RENDER PAGE
+===================================================== */
+
+async function renderPage(number) {
+
+
+    if (!pdf)
+        return;
+
+
+    if (rendering) {
+
+        pendingPage =
+            number;
+
+        return;
+
+    }
+
+
+    rendering = true;
+
+
+    try {
+
+
+        const page =
+            await pdf.getPage(
+                number
+            );
+
+
+        const baseViewport =
+            page.getViewport({
+                scale: 1
+            });
+
+
+        const availableWidth =
+            slideArea.clientWidth -
+            10;
+
+
+        const availableHeight =
+            slideArea.clientHeight -
+            10;
+
+
+        /*
+            Calculate scale to fit
+            the slide inside viewer.
+        */
+
+        const fitScale =
+            Math.min(
+
+                availableWidth /
+                baseViewport.width,
+
+                availableHeight /
+                baseViewport.height
+
+            );
+
+
+        /*
+            Apply zoom.
+        */
+
+        const finalScale =
+            fitScale *
+            zoomLevel;
+
+
+        const viewport =
+            page.getViewport({
+
+                scale:
+                    finalScale
+
+            });
+
+
+        const dpr =
+            window.devicePixelRatio ||
+            1;
+
+
+        canvas.width =
+            Math.round(
+                viewport.width *
+                dpr
+            );
+
+
+        canvas.height =
+            Math.round(
+                viewport.height *
+                dpr
+            );
+
+
+        canvas.style.width =
+            viewport.width +
+            "px";
+
+
+        canvas.style.height =
+            viewport.height +
+            "px";
+
+
+        canvasWrapper.style.width =
+            viewport.width +
+            "px";
+
+
+        canvasWrapper.style.height =
+            viewport.height +
+            "px";
+
+
+        /*
+            Enable scrolling
+            when zoomed.
+        */
+
+        if (
+            zoomLevel > 1
+        ) {
+
+            slideArea.classList.add(
+                "zoomed"
+            );
+
+        }
+
+        else {
+
+            slideArea.classList.remove(
+                "zoomed"
+            );
+
+        }
+
+
+        const renderContext = {
+
+            canvasContext:
+                ctx,
+
+            viewport:
+                viewport,
+
+            transform:
+
+                dpr !== 1
+
+                ?
+
+                [
+                    dpr,
+                    0,
+                    0,
+                    dpr,
+                    0,
+                    0
+                ]
+
+                :
+
+                null
+
+        };
+
+
+        await page.render(
+            renderContext
+        ).promise;
+
+
+        pageNumber =
+            number;
+
+
+        currentSlideElement.textContent =
+            pageNumber;
+
+
+        progressBar.style.width =
+
+            (
+                pageNumber /
+                pdf.numPages *
+                100
+            ) + "%";
+
+
+        updateNavigation();
+
+
+        updateThumbnails();
+
+
+        updateZoomText();
+
+
+        applyPan();
+
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "Render error:",
+            error
+        );
+
+    }
+
+
+    rendering = false;
+
+
+    if (
+        pendingPage !== null
+    ) {
+
+        const nextPage =
+            pendingPage;
+
+
+        pendingPage =
+            null;
+
+
+        renderPage(
+            nextPage
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   PAN
+===================================================== */
+
+function applyPan() {
+
+
+    if (
+        zoomLevel <= 1
+    ) {
+
+        panX = 0;
+
+        panY = 0;
+
+    }
+
+
+    canvasWrapper.style.transform =
+
+        `translate(
+            ${panX}px,
+            ${panY}px
+        )`;
+
+}
+
+
+
+/* =====================================================
+   LIMIT PAN
+===================================================== */
+
+function limitPan() {
+
+
+    /*
+        Larger zoom allows more movement.
+    */
+
+    const maxX =
+        slideArea.clientWidth *
+        (zoomLevel - 1) *
+        0.75;
+
+
+    const maxY =
+        slideArea.clientHeight *
+        (zoomLevel - 1) *
+        0.75;
+
+
+    panX =
+        Math.max(
+            -maxX,
+            Math.min(
+                maxX,
+                panX
+            )
+        );
+
+
+    panY =
+        Math.max(
+            -maxY,
+            Math.min(
+                maxY,
+                panY
+            )
+        );
+
+}
+
+
+
+/* =====================================================
+   NEXT
+===================================================== */
+
+window.nextSlide =
+function() {
+
+
+    if (!pdf)
+        return;
+
+
+    if (
+        pageNumber <
+        pdf.numPages
+    ) {
+
+
+        resetPan();
+
+
+        renderPage(
+            pageNumber + 1
+        );
+
+
+    }
+
+};
+
+
+
+/* =====================================================
+   PREVIOUS
+===================================================== */
+
+window.previousSlide =
+function() {
+
+
+    if (!pdf)
+        return;
+
+
+    if (
+        pageNumber > 1
+    ) {
+
+
+        resetPan();
+
+
+        renderPage(
+            pageNumber - 1
+        );
+
+
+    }
+
+};
+
+
+
+/* =====================================================
+   FIRST
+===================================================== */
+
+window.firstSlide =
+function() {
+
+
+    if (!pdf)
+        return;
+
+
+    resetPan();
+
+
+    renderPage(
+        1
+    );
+
+};
+
+
+
+/* =====================================================
+   LAST
+===================================================== */
+
+window.lastSlide =
+function() {
+
+
+    if (!pdf)
+        return;
+
+
+    resetPan();
+
+
+    renderPage(
+        pdf.numPages
+    );
+
+};
+
+
+
+/* =====================================================
+   ZOOM IN
+===================================================== */
+
+window.zoomIn =
+function() {
+
+
+    const oldZoom =
+        zoomLevel;
+
+
+    zoomLevel =
+        Math.min(
+            4,
+            zoomLevel + .25
+        );
+
+
+    if (
+        zoomLevel !==
+        oldZoom
+    ) {
+
+
+        renderPage(
+            pageNumber
+        );
+
+
+    }
+
+};
+
+
+
+/* =====================================================
+   ZOOM OUT
+===================================================== */
+
+window.zoomOut =
+function() {
+
+
+    const oldZoom =
+        zoomLevel;
+
+
+    zoomLevel =
+        Math.max(
+            1,
+            zoomLevel - .25
+        );
+
+
+    if (
+        zoomLevel !==
+        oldZoom
+    ) {
+
+
+        if (
+            zoomLevel === 1
+        ) {
+
+            resetPan();
+
+        }
+
+
+        renderPage(
+            pageNumber
+        );
+
+
+    }
+
+};
+
+
+
+/* =====================================================
+   RESET ZOOM
+===================================================== */
+
+window.resetZoom =
+function() {
+
+
+    zoomLevel =
+        1;
+
+
+    resetPan();
+
+
+    renderPage(
+        pageNumber
+    );
+
+};
+
+
+
+/* =====================================================
+   RESET PAN
+===================================================== */
+
+function resetPan() {
+
+
+    panX = 0;
+
+    panY = 0;
+
+
+    canvasWrapper.style.transform =
+        "translate(0px,0px)";
+
+}
+
+
+
+/* =====================================================
+   ZOOM TEXT
+===================================================== */
+
+function updateZoomText() {
+
+
+    zoomDisplay.textContent =
+
+        Math.round(
+            zoomLevel * 100
+        ) + "%";
+
+}
+
+
+
+/* =====================================================
+   NAVIGATION STATE
+===================================================== */
+
+function updateNavigation() {
+
+
+    previousButton.disabled =
+        pageNumber === 1;
+
+
+    nextButton.disabled =
+        pageNumber ===
+        pdf.numPages;
+
+}
+
+
+
+/* =====================================================
+   THUMBNAILS
+===================================================== */
+
+async function createThumbnails() {
+
+
+    thumbnails.innerHTML = "";
+
+
+    for (
+        let i = 1;
+        i <= pdf.numPages;
+        i++
+    ) {
+
+
+        try {
+
+
+            const page =
+                await pdf.getPage(
+                    i
+                );
+
+
+            const viewport =
+                page.getViewport({
+
+                    scale: .18
+
+                });
+
+
+            const thumb =
+                document.createElement(
+                    "canvas"
+                );
+
+
+            thumb.width =
+                viewport.width;
+
+
+            thumb.height =
+                viewport.height;
+
+
+            thumb.className =
+                "thumbnail";
+
+
+            await page.render({
+
+                canvasContext:
+                    thumb.getContext(
+                        "2d"
+                    ),
+
+                viewport:
+                    viewport
+
+            }).promise;
+
+
+            thumb.onclick =
+            function() {
+
+
+                resetPan();
+
+
+                renderPage(
+                    i
+                );
+
+
+            };
+
+
+            thumbnails.appendChild(
+                thumb
+            );
+
+
+        }
+
+        catch(error) {
+
+            console.error(
+                "Thumbnail error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    updateThumbnails();
+
+}
+
+
+
+/* =====================================================
+   UPDATE THUMBNAILS
+===================================================== */
+
+function updateThumbnails() {
+
+
+    const items =
+        thumbnails.children;
+
+
+    for (
+        let i = 0;
+        i < items.length;
+        i++
+    ) {
+
+
+        if (
+            i + 1 ===
+            pageNumber
+        ) {
+
+
+            items[i]
+                .classList
+                .add(
+                    "active"
+                );
+
+
+            items[i].scrollIntoView({
+
+                behavior:
+                    "smooth",
+
+                block:
+                    "nearest",
+
+                inline:
+                    "center"
+
+            });
+
+
+        }
+
+        else {
+
+
+            items[i]
+                .classList
+                .remove(
+                    "active"
+                );
+
+
+        }
+
+    }
+
+}
+
+
+
+/* =====================================================
+   FULLSCREEN
+===================================================== */
+
+window.toggleFullscreen =
+function() {
+
+
+    if (
+        !document.fullscreenElement
+    ) {
+
+
+        document
+            .getElementById(
+                "app"
+            )
+            .requestFullscreen();
+
+
+    }
+
+    else {
+
+
+        document.exitFullscreen();
+
+
+    }
+
+};
+
+
+
+/* =====================================================
+   DOWNLOAD
+===================================================== */
+
+window.downloadPresentation =
+function() {
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href =
+        PDF_FILE;
+
+
+    link.download =
+        "presentation.pdf";
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    link.remove();
+
+};
+
+
+
+/* =====================================================
+   KEYBOARD
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+
+        if (
+            event.key ===
+            "ArrowRight"
+        ) {
+
+            nextSlide();
+
+        }
+
+
+        else if (
+            event.key ===
+            "ArrowLeft"
+        ) {
+
+            previousSlide();
+
+        }
+
+
+        else if (
+            event.key ===
+            "Home"
+        ) {
+
+            firstSlide();
+
+        }
+
+
+        else if (
+            event.key ===
+            "End"
+        ) {
+
+            lastSlide();
+
+        }
+
+
+        else if (
+            event.key ===
+            "+" ||
+            event.key ===
+            "="
+        ) {
+
+            zoomIn();
+
+        }
+
+
+        else if (
+            event.key ===
+            "-"
+        ) {
+
+            zoomOut();
+
+        }
+
+
+        else if (
+            event.key ===
+            "0"
+        ) {
+
+            resetZoom();
+
+        }
+
+
+        else if (
+            event.key ===
+            "f" ||
+            event.key ===
+            "F"
+        ) {
+
+            toggleFullscreen();
+
+        }
+
+
+        else if (
+            event.key ===
+            " "
+        ) {
+
+
+            event.preventDefault();
+
+
+            nextSlide();
+
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   CTRL + MOUSE WHEEL ZOOM
+===================================================== */
+
+slideArea.addEventListener(
+    "wheel",
+    function(event) {
+
+
+        if (
+            event.ctrlKey
+        ) {
+
+
+            event.preventDefault();
+
+
+            if (
+                event.deltaY < 0
+            ) {
+
+                zoomIn();
+
+            }
+
+            else {
+
+                zoomOut();
+
+            }
+
+
+        }
+
+    },
+    {
+        passive: false
+    }
+);
+
+
+
+/* =====================================================
+   TOUCH DISTANCE
+===================================================== */
+
+function getDistance(
+    touches
+) {
+
+
+    const x =
+        touches[0].clientX -
+        touches[1].clientX;
+
+
+    const y =
+        touches[0].clientY -
+        touches[1].clientY;
+
+
+    return Math.sqrt(
+        x * x +
+        y * y
+    );
+
+}
+
+
+
+/* =====================================================
+   TOUCH CENTER
+===================================================== */
+
+function getCenter(
+    touches
+) {
+
+
+    return {
+
+        x:
+            (
+                touches[0].clientX +
+                touches[1].clientX
+            ) / 2,
+
+        y:
+            (
+                touches[0].clientY +
+                touches[1].clientY
+            ) / 2
+
+    };
+
+}
+
+
+
+/* =====================================================
+   TOUCH START
+===================================================== */
+
+slideArea.addEventListener(
+    "touchstart",
+    function(event) {
+
+
+        /*
+            TWO FINGERS
+        */
+
+        if (
+            event.touches.length === 2
+        ) {
+
+
+            event.preventDefault();
+
+
+            twoFingerGesture =
+                true;
+
+
+            lastDistance =
+                getDistance(
+                    event.touches
+                );
+
+
+            const center =
+                getCenter(
+                    event.touches
+                );
+
+
+            lastCenterX =
+                center.x;
+
+
+            lastCenterY =
+                center.y;
+
+
+            return;
+
+        }
+
+
+
+        /*
+            ONE FINGER
+        */
+
+        if (
+            event.touches.length === 1
+        ) {
+
+
+            touchStartX =
+                event.touches[0]
+                    .clientX;
+
+
+            touchStartY =
+                event.touches[0]
+                    .clientY;
+
+
+        }
+
+
+    },
+    {
+        passive: false
+    }
+);
+
+
+
+/* =====================================================
+   TOUCH MOVE
+===================================================== */
+
+slideArea.addEventListener(
+    "touchmove",
+    function(event) {
+
+
+        /*
+            TWO FINGER
+            PINCH + PAN
+        */
+
+        if (
+            event.touches.length === 2
+        ) {
+
+
+            event.preventDefault();
+
+
+            twoFingerGesture =
+                true;
+
+
+            const distance =
+                getDistance(
+                    event.touches
+                );
+
+
+            const center =
+                getCenter(
+                    event.touches
+                );
+
+
+            /* -----------------------------------------
+               PINCH ZOOM
+            ----------------------------------------- */
+
+            if (
+                lastDistance > 0
+            ) {
+
+
+                const scale =
+                    distance /
+                    lastDistance;
+
+
+                /*
+                    Ignore extremely tiny movement.
+                */
+
+                if (
+                    Math.abs(
+                        scale - 1
+                    ) > .003
+                ) {
+
+
+                    const oldZoom =
+                        zoomLevel;
+
+
+                    zoomLevel *=
+                        scale;
+
+
+                    zoomLevel =
+                        Math.max(
+                            1,
+                            Math.min(
+                                4,
+                                zoomLevel
+                            )
+                        );
+
+
+                    /*
+                        Keep pan when zooming.
+                    */
+
+                    if (
+                        zoomLevel === 1
+                    ) {
+
+                        resetPan();
+
+                    }
+
+
+                    updateZoomText();
+
+
+                    /*
+                        Render after a short delay.
+                    */
+
+                    clearTimeout(
+                        pinchRenderTimer
+                    );
+
+
+                    pinchRenderTimer =
+                        setTimeout(
+                            function() {
+
+                                renderPage(
+                                    pageNumber
+                                );
+
+                            },
+                            30
+                        );
+
+                }
+
+            }
+
+
+
+            /* -----------------------------------------
+               TWO-FINGER DRAG
+            ----------------------------------------- */
+
+            if (
+                zoomLevel > 1
+            ) {
+
+
+                const moveX =
+                    center.x -
+                    lastCenterX;
+
+
+                const moveY =
+                    center.y -
+                    lastCenterY;
+
+
+                panX += moveX;
+
+                panY += moveY;
+
+
+                limitPan();
+
+
+                applyPan();
+
+            }
+
+
+            lastDistance =
+                distance;
+
+
+            lastCenterX =
+                center.x;
+
+
+            lastCenterY =
+                center.y;
+
+
+            return;
+
+        }
+
+
+    },
+    {
+        passive: false
+    }
+);
+
+
+
+/* =====================================================
+   TOUCH END
+===================================================== */
+
+slideArea.addEventListener(
+    "touchend",
+    function(event) {
+
+
+        /*
+            If two-finger gesture finished,
+            don't trigger slide swipe.
+        */
+
+        if (
+            twoFingerGesture
+        ) {
+
+
+            if (
+                event.touches.length === 0
+            ) {
+
+
+                twoFingerGesture =
+                    false;
+
+
+                lastDistance =
+                    0;
+
+
+            }
+
+
+            return;
+
+        }
+
+
+
+        /*
+            ONE FINGER SWIPE
+        */
+
+        if (
+            event.changedTouches.length === 1
+        ) {
+
+
+            const endX =
+                event.changedTouches[0]
+                    .clientX;
+
+
+            const endY =
+                event.changedTouches[0]
+                    .clientY;
+
+
+            const differenceX =
+                endX -
+                touchStartX;
+
+
+            const differenceY =
+                endY -
+                touchStartY;
+
+
+            /*
+                Ignore vertical movement.
+            */
+
+            if (
+                Math.abs(differenceX) <
+                50
+                ||
+                Math.abs(differenceX) <
+                Math.abs(differenceY)
+            ) {
+
+                return;
+
+            }
+
+
+            /*
+                If zoomed,
+                don't change slide from
+                a one-finger movement.
+            */
+
+            if (
+                zoomLevel > 1
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                differenceX < 0
+            ) {
+
+                nextSlide();
+
+            }
+
+            else {
+
+                previousSlide();
+
+            }
+
+        }
+
+    },
+    {
+        passive: false
+    }
+);
+
+
+
+/* =====================================================
+   RESIZE
+===================================================== */
+
+let resizeTimer;
+
+
+window.addEventListener(
+    "resize",
+    function() {
+
+
+        clearTimeout(
+            resizeTimer
+        );
+
+
+        resizeTimer =
+            setTimeout(
+                function() {
+
+
+                    if (pdf) {
+
+
+                        renderPage(
+                            pageNumber
+                        );
+
+
+                    }
+
+
+                },
+                200
+            );
+
+    }
+);
+
+
+
+/* =====================================================
+   START
+===================================================== */
+
+loadPresentation();
+
+
+</script>
+
+</body>
+
+</html>
