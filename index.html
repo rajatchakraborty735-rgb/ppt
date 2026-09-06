@@ -208,6 +208,22 @@ body {
 }
 
 
+.headerButton.active {
+
+    background: #635bff;
+
+}
+
+
+/* Landscape-mode button: mobile only, hidden on desktop/laptop by default */
+
+.landscapeButton {
+
+    display: none;
+
+}
+
+
 /* =====================================================
    VIEWER
 ===================================================== */
@@ -786,6 +802,19 @@ body {
     }
 
 
+    /* Show the landscape-mode button only on mobile-width screens */
+
+    .landscapeButton {
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+    }
+
+
     .viewer {
 
         padding:
@@ -987,6 +1016,19 @@ body {
 
 
     <div class="headerButtons">
+
+
+        <!-- LANDSCAPE FULLSCREEN (mobile only) -->
+
+        <button
+            class="headerButton landscapeButton"
+            onclick="toggleMobileLandscape()"
+            id="landscapeButton"
+            title="Landscape Fullscreen">
+
+            ⤢
+
+        </button>
 
 
         <!-- DOWNLOAD -->
@@ -1397,6 +1439,12 @@ const zoomDisplay =
     );
 
 
+const landscapeButton =
+    document.getElementById(
+        "landscapeButton"
+    );
+
+
 
 /* =====================================================
    VARIABLES
@@ -1456,6 +1504,15 @@ let twoFingerGesture = false;
 */
 
 let pinchRenderTimer = null;
+
+
+/*
+    Whether the mobile
+    landscape-fullscreen mode
+    is currently active.
+*/
+
+let landscapeModeActive = false;
 
 
 
@@ -2320,6 +2377,216 @@ function() {
     }
 
 };
+
+
+
+/* =====================================================
+   MOBILE LANDSCAPE FULLSCREEN
+
+   Enters fullscreen and locks
+   (or requests) landscape
+   orientation. Mobile-only,
+   since the button is hidden
+   with CSS on wider screens.
+===================================================== */
+
+window.toggleMobileLandscape =
+async function() {
+
+
+    /*
+        Turning OFF: exit
+        fullscreen and unlock
+        orientation.
+    */
+
+    if (
+        landscapeModeActive
+    ) {
+
+
+        try {
+
+            if (
+                screen.orientation &&
+                screen.orientation.unlock
+            ) {
+
+                screen.orientation.unlock();
+
+            }
+
+        }
+
+        catch(error) {
+
+            console.warn(
+                "Orientation unlock failed:",
+                error
+            );
+
+        }
+
+
+        if (
+            document.fullscreenElement
+        ) {
+
+            await document.exitFullscreen();
+
+        }
+
+
+        landscapeModeActive =
+            false;
+
+
+        landscapeButton.classList.remove(
+            "active"
+        );
+
+
+        return;
+
+    }
+
+
+
+    /*
+        Turning ON: enter
+        fullscreen, then try
+        to lock to landscape.
+    */
+
+    try {
+
+
+        const appElement =
+            document.getElementById(
+                "app"
+            );
+
+
+        if (
+            !document.fullscreenElement
+        ) {
+
+            await appElement.requestFullscreen();
+
+        }
+
+
+        if (
+            screen.orientation &&
+            screen.orientation.lock
+        ) {
+
+            await screen.orientation.lock(
+                "landscape"
+            );
+
+        }
+
+
+        landscapeModeActive =
+            true;
+
+
+        landscapeButton.classList.add(
+            "active"
+        );
+
+
+        /*
+            Re-render at the new
+            fullscreen landscape size.
+        */
+
+        setTimeout(
+            function() {
+
+                if (pdf) {
+
+                    renderPage(
+                        pageNumber
+                    );
+
+                }
+
+            },
+            250
+        );
+
+
+    }
+
+    catch(error) {
+
+
+        /*
+            Some browsers (notably iOS Safari)
+            don't support orientation locking.
+            Fullscreen still applies, and the
+            device can simply be rotated by hand.
+        */
+
+        console.warn(
+            "Landscape lock unavailable:",
+            error
+        );
+
+    }
+
+};
+
+
+
+/*
+    Exiting fullscreen by any means
+    (Esc key, swipe, etc.) should
+    reset the landscape button state.
+*/
+
+document.addEventListener(
+    "fullscreenchange",
+    function() {
+
+
+        if (
+            !document.fullscreenElement &&
+            landscapeModeActive
+        ) {
+
+
+            landscapeModeActive =
+                false;
+
+
+            landscapeButton.classList.remove(
+                "active"
+            );
+
+
+            try {
+
+                if (
+                    screen.orientation &&
+                    screen.orientation.unlock
+                ) {
+
+                    screen.orientation.unlock();
+
+                }
+
+            }
+
+            catch(error) {}
+
+
+        }
+
+    }
+);
 
 
 
